@@ -62,7 +62,24 @@
       </table>
     </div>
 
-    {# Задание 8: блок «Похожие миссии» #}
+    {% if related %}
+    <div class="card p-3 mt-3">
+      <h6 class="neon-text mb-3">// ПОХОЖИЕ МИССИИ</h6>
+      {% for rel in related %}
+      <div class="mb-2 pb-2 border-bottom border-secondary">
+        <a href="{% url 'mission_detail' rel.id %}" class="small">{{ rel.title }}</a>
+        <div class="d-flex justify-content-between">
+          <small class="text-muted">
+            {% if rel.difficulty == mission.difficulty %}Похожая сложность{% endif %}
+            {% if rel.corporation == mission.corporation %}Тот же заказчик{% endif %}
+          </small>
+          <small class="neon-text">{{ rel.reward }} ₵</small>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+
   </div>
 </div>
 {% endblock %}

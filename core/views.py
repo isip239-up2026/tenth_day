@@ -10,13 +10,18 @@ def index(request):
 
 
 def mission_detail(request, mission_id):
+    from django.db.models import Q
     mission = get_object_or_404(Mission, id=mission_id)
     form = ApplicationForm()
     app_count = mission.applications.count()
+    related = Mission.objects.filter(
+        Q(difficulty=mission.difficulty) | Q(corporation=mission.corporation)
+    ).exclude(id=mission.id)[:4]
     return render(request, "core/mission_detail.html", {
         "mission": mission,
         "form": form,
         "app_count": app_count,
+        "related": related,
     })
 
 
