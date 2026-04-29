@@ -1,12 +1,38 @@
 from django.shortcuts import render, get_object_or_404, redirect
+from django.core.paginator import Paginator
 from .models import Mission, Hacker, Corporation, Implant, NewsPost, MissionApplication
 from .forms import ApplicationForm
 
 
 def index(request):
-    missions = Mission.objects.select_related("corporation").filter(status="open")
-    news     = NewsPost.objects.all()[:5]
-    return render(request, "core/index.html", {"missions": missions, "news": news})
+    difficulty = request.GET.get("difficulty")
+    status = request.GET.get("status")
+
+    missions = Mission.objects.select_related("corporation").all()
+
+    if difficulty:
+        missions = missions.filter(difficulty=difficulty)
+    if status:
+        missions = missions.filter(status=status)
+
+    paginator = Paginator(missions, 5)
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+
+    news = NewsPost.objects.all()[:5]
+
+
+    filter_params = ""
+    if difficulty:
+        filter_params += f"&difficulty={difficulty}"
+    if status:
+        filter_params += f"&status={status}"
+
+    return render(request, "core/index.html", {
+        "missions": page_obj,
+        "news": news,
+        "filter_params": filter_params,
+    })
 
 
 def mission_detail(request, mission_id):
@@ -80,6 +106,7 @@ def apply_mission(request, mission_id):
         "app_count": mission.applications.count(),
     })
 
+
 def hacker_detail(request, hacker_id):
     hacker = get_object_or_404(Hacker, id=hacker_id)
     applications = hacker.applications.select_related("mission").all()
@@ -87,6 +114,7 @@ def hacker_detail(request, hacker_id):
         "hacker": hacker,
         "applications": applications,
     })
+
 
 def implants(request):
     slot = request.GET.get("slot")

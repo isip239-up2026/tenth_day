@@ -6,7 +6,7 @@
 <div class="row mb-4">
   <div class="col">
     <div class="terminal-box">
-      <span class="neon-text">&gt; СИСТЕМА ОНЛАЙН. ДОСТУПНЫЕ МИССИИ: {{ missions|length }}</span><br>
+      <span class="neon-text">&gt; СИСТЕМА ОНЛАЙН. ДОСТУПНЫЕ МИССИИ: {{ missions.paginator.count }}</span><br>
       <span style="color:#555;">&gt; выберите задание и получите контракт...</span>
     </div>
   </div>
@@ -16,7 +16,34 @@
   <div class="col-md-8">
     <div class="d-flex justify-content-between align-items-center mb-3">
       <h4 class="neon-text mb-0">// АКТИВНЫЕ КОНТРАКТЫ</h4>
-      {# Задание 4: добавить фильтры по сложности и статусу #}
+    </div>
+
+
+    <div class="mb-3">
+      <div class="d-flex gap-2 flex-wrap">
+
+        <div class="btn-group btn-group-sm">
+          <a href="?{% if request.GET.status %}status={{ request.GET.status }}{% endif %}"
+             class="btn {% if not request.GET.difficulty %}btn-success{% else %}btn-outline-success{% endif %}">Все</a>
+          {% for d in "12345" %}
+          <a href="?difficulty={{ d }}{% if request.GET.status %}&status={{ request.GET.status }}{% endif %}"
+             class="btn {% if request.GET.difficulty == d %}btn-success{% else %}btn-outline-success{% endif %}">{{ d }}</a>
+          {% endfor %}
+        </div>
+
+        <div class="btn-group btn-group-sm">
+          <a href="?{% if request.GET.difficulty %}difficulty={{ request.GET.difficulty }}{% endif %}"
+             class="btn {% if not request.GET.status %}btn-warning{% else %}btn-outline-warning{% endif %}">Все</a>
+          <a href="?status=open{% if request.GET.difficulty %}&difficulty={{ request.GET.difficulty }}{% endif %}"
+             class="btn {% if request.GET.status == 'open' %}btn-warning{% else %}btn-outline-warning{% endif %}">Открыта</a>
+          <a href="?status=active{% if request.GET.difficulty %}&difficulty={{ request.GET.difficulty }}{% endif %}"
+             class="btn {% if request.GET.status == 'active' %}btn-warning{% else %}btn-outline-warning{% endif %}">Активна</a>
+          <a href="?status=completed{% if request.GET.difficulty %}&difficulty={{ request.GET.difficulty }}{% endif %}"
+             class="btn {% if request.GET.status == 'completed' %}btn-warning{% else %}btn-outline-warning{% endif %}">Завершена</a>
+          <a href="?status=failed{% if request.GET.difficulty %}&difficulty={{ request.GET.difficulty }}{% endif %}"
+             class="btn {% if request.GET.status == 'failed' %}btn-warning{% else %}btn-outline-warning{% endif %}">Провалена</a>
+        </div>
+      </div>
     </div>
 
     <div class="row g-3">
@@ -32,7 +59,7 @@
               </h5>
               <small class="text-muted">
                 {% if mission.corporation %}{{ mission.corporation.name }} · {% endif %}
-                {{ mission.posted_at|date:"d.m.Y" }}
+                {{ mission.posted_at|date:"d.m.Y" }} · {{ mission.get_status_display }}
               </small>
             </div>
             <div class="text-end">
@@ -44,11 +71,33 @@
         </div>
       </div>
       {% empty %}
-      <p class="text-muted">Активных миссий нет.</p>
+      <p class="text-muted">Миссий не найдено.</p>
       {% endfor %}
     </div>
 
-    {# Задание 4: добавить пагинацию #}
+
+    {% if missions.has_other_pages %}
+    <nav class="mt-4">
+      <ul class="pagination pagination-sm">
+        {% if missions.has_previous %}
+        <li class="page-item">
+          <a class="page-link bg-dark text-light border-secondary" href="?page={{ missions.previous_page_number }}{{ filter_params }}">←</a>
+        </li>
+        {% endif %}
+        {% for num in missions.paginator.page_range %}
+        <li class="page-item {% if missions.number == num %}active{% endif %}">
+          <a class="page-link bg-dark text-light border-secondary" href="?page={{ num }}{{ filter_params }}">{{ num }}</a>
+        </li>
+        {% endfor %}
+        {% if missions.has_next %}
+        <li class="page-item">
+          <a class="page-link bg-dark text-light border-secondary" href="?page={{ missions.next_page_number }}{{ filter_params }}">→</a>
+        </li>
+        {% endif %}
+      </ul>
+    </nav>
+    {% endif %}
+
   </div>
 
   <div class="col-md-4">
