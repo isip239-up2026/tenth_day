@@ -1,0 +1,59 @@
+{% extends "core/base.html" %}
+
+{% block title %}{{ mission.title }} — NETRUNNER BOARD{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="col-md-8">
+    <nav aria-label="breadcrumb" class="mb-3">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'index' %}">Миссии</a></li>
+        <li class="breadcrumb-item active" style="color:#aaa;">{{ mission.title }}</li>
+      </ol>
+    </nav>
+
+    <h2 class="neon-blue">{{ mission.title }}</h2>
+    <div class="d-flex gap-3 mb-3 flex-wrap">
+      <span class="neon-text">НАГРАДА: {{ mission.reward }} ₵</span>
+      <span class="neon-pink">СЛОЖНОСТЬ: {{ mission.difficulty_bars }}</span>
+      <span class="text-muted">СТАТУС: {{ mission.get_status_display }}</span>
+      {% if mission.corporation %}
+      <span class="text-muted">
+        ЗАКАЗЧИК:
+        {# Задание 3: сделать ссылкой на страницу корпорации #}
+        {{ mission.corporation.name }}
+      </span>
+      {% endif %}
+    </div>
+
+    <div class="terminal-box mb-4">
+      {{ mission.description|linebreaks }}
+    </div>
+
+    <hr>
+
+    {# Задание 5: форма подачи заявки на миссию #}
+    <h5 class="neon-text mb-3">// ПОДАТЬ ЗАЯВКУ</h5>
+    <p class="text-muted">Форма подачи заявки появится здесь.</p>
+
+  </div>
+
+  <div class="col-md-4">
+    <div class="card p-3 mb-3">
+      <h6 class="neon-pink mb-3">// ИНФО</h6>
+      <table class="table table-sm" style="color:#aaa;border-color:#2a2a4a;">
+        <tr><td>Дата</td><td>{{ mission.posted_at|date:"d.m.Y" }}</td></tr>
+        <tr><td>Сложность</td><td>{{ mission.difficulty }}/5</td></tr>
+        <tr><td>Статус</td><td>{{ mission.get_status_display }}</td></tr>
+        <tr>
+          <td>Заявок</td>
+          {# Задание 5: вывести количество заявок #}
+          <td>—</td>
+        </tr>
+      </table>
+    </div>
+
+    {# Задание 8: блок «Похожие миссии» #}
+  </div>
+</div>
+{% endblock %}

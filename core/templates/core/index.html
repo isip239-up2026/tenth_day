@@ -1,0 +1,76 @@
+{% extends "core/base.html" %}
+
+{% block title %}Доска миссий — NETRUNNER BOARD{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+  <div class="col">
+    <div class="terminal-box">
+      <span class="neon-text">&gt; СИСТЕМА ОНЛАЙН. ДОСТУПНЫЕ МИССИИ: {{ missions|length }}</span><br>
+      <span style="color:#555;">&gt; выберите задание и получите контракт...</span>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-8">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h4 class="neon-text mb-0">// АКТИВНЫЕ КОНТРАКТЫ</h4>
+      {# Задание 4: добавить фильтры по сложности и статусу #}
+    </div>
+
+    <div class="row g-3">
+      {% for mission in missions %}
+      <div class="col-12">
+        <div class="card p-3">
+          <div class="d-flex justify-content-between align-items-start">
+            <div>
+              <h5 class="mb-1">
+                <a href="{% url 'mission_detail' mission.id %}" class="text-decoration-none" style="color: var(--neon-blue);">
+                  {{ mission.title }}
+                </a>
+              </h5>
+              <small class="text-muted">
+                {% if mission.corporation %}{{ mission.corporation.name }} · {% endif %}
+                {{ mission.posted_at|date:"d.m.Y" }}
+              </small>
+            </div>
+            <div class="text-end">
+              <div class="neon-text fw-bold">{{ mission.reward }} ₵</div>
+              <small class="neon-pink">{{ mission.difficulty_bars }}</small>
+            </div>
+          </div>
+          <p class="mt-2 mb-0 text-muted">{{ mission.description|truncatewords:20 }}</p>
+        </div>
+      </div>
+      {% empty %}
+      <p class="text-muted">Активных миссий нет.</p>
+      {% endfor %}
+    </div>
+
+    {# Задание 4: добавить пагинацию #}
+  </div>
+
+  <div class="col-md-4">
+    <h4 class="neon-pink mb-3">// ПОСЛЕДНИЕ НОВОСТИ</h4>
+    {% for post in news %}
+    <div class="card p-2 mb-2">
+      <small class="text-muted">{{ post.source }} · {{ post.posted_at|date:"d.m" }}</small>
+      <div>
+        {# Задание 9: сделать заголовок ссылкой #}
+        <small>{{ post.title }}</small>
+      </div>
+    </div>
+    {% empty %}
+    <p class="text-muted"><small>Новостей нет.</small></p>
+    {% endfor %}
+    {# Задание 9: добавить ссылку «Все новости» #}
+
+    <hr>
+
+    <h4 class="neon-text mb-3 mt-2">// ТОП ХАКЕРОВ</h4>
+    {# Задание 11: вывести топ-5 хакеров по репутации #}
+    <p class="text-muted"><small>Загрузка данных...</small></p>
+  </div>
+</div>
+{% endblock %}
