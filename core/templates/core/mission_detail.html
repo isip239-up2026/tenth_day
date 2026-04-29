@@ -19,9 +19,8 @@
       <span class="text-muted">СТАТУС: {{ mission.get_status_display }}</span>
       {% if mission.corporation %}
       <span class="text-muted">
-        ЗАКАЗЧИК:
-        {# Задание 3: сделать ссылкой на страницу корпорации #}
-        {{ mission.corporation.name }}
+      ЗАКАЗЧИК:
+      <a href="{% url 'corporation_detail' mission.corporation.id %}">{{ mission.corporation.name }}</a>
       </span>
       {% endif %}
     </div>
