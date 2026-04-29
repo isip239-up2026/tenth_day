@@ -1,0 +1,28 @@
+{% extends "core/base.html" %}
+
+{% block title %}Корпорации — NETRUNNER BOARD{% endblock %}
+
+{% block content %}
+<h2 class="neon-blue mb-4">// КОРПОРАЦИИ</h2>
+
+<div class="row g-4">
+  {% for corp in corporations %}
+  <div class="col-md-4">
+    <a href="{% url 'corporation_detail' corp.id %}" class="text-decoration-none">
+      <div class="card p-3 h-100">
+        {% if corp.logo_url %}
+        <img src="{{ corp.logo_url }}" class="card-img-top mb-2" alt="{{ corp.name }}" style="height:80px;object-fit:contain;">
+        {% endif %}
+        <h5 class="neon-pink">{{ corp.name }}</h5>
+        <p class="text-muted small mb-1">{{ corp.slogan }}</p>
+        <span class="badge bg-dark text-muted border border-secondary">
+          Основана: {{ corp.founded|default:"—" }}
+        </span>
+      </div>
+    </a>
+  </div>
+  {% empty %}
+  <p class="text-muted">Корпорации не найдены.</p>
+  {% endfor %}
+</div>
+{% endblock %}

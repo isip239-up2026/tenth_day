@@ -1,0 +1,62 @@
+{% extends "core/base.html" %}
+
+{% block title %}{{ hacker.handle }} — NETRUNNER BOARD{% endblock %}
+
+{% block content %}
+<nav aria-label="breadcrumb" class="mb-3">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{% url 'hackers' %}">Хакеры</a></li>
+    <li class="breadcrumb-item active" style="color:#aaa;">{{ hacker.handle }}</li>
+  </ol>
+</nav>
+
+<div class="row">
+  <div class="col-md-4">
+    <div class="card p-3 mb-3 text-center">
+      {% if hacker.avatar_url %}
+      <img src="{{ hacker.avatar_url }}" class="rounded-circle mx-auto mb-3"
+           style="width:120px;height:120px;object-fit:cover;border:3px solid var(--neon-green);">
+      {% else %}
+      <div class="rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center"
+           style="width:120px;height:120px;background:#111;border:3px solid var(--neon-green);font-size:3rem;">
+        👤
+      </div>
+      {% endif %}
+      <h3 class="neon-blue">{{ hacker.handle }}</h3>
+      <p class="neon-pink">{{ hacker.get_rank_display }}</p>
+      <span class="neon-text fs-5">REP: {{ hacker.rep }}</span>
+    </div>
+
+    <div class="card p-3">
+      <h6 class="neon-pink mb-2">// КОРПОРАЦИЯ</h6>
+      {% if hacker.corporation %}
+      <a href="{% url 'corporation_detail' hacker.corporation.id %}">{{ hacker.corporation.name }}</a>
+      {% else %}
+      <span class="text-muted">Независимый</span>
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="col-md-8">
+    <div class="card p-3 mb-3">
+      <h6 class="neon-text mb-2">// БИОГРАФИЯ</h6>
+      <p class="text-muted">{{ hacker.bio|linebreaks }}</p>
+    </div>
+
+    <h5 class="neon-pink mb-3">// ЗАЯВКИ НА МИССИИ</h5>
+    {% for app in applications %}
+    <div class="card p-3 mb-2">
+      <div class="d-flex justify-content-between align-items-start">
+        <div>
+          <a href="{% url 'mission_detail' app.mission.id %}">{{ app.mission.title }}</a>
+          <small class="text-muted d-block">{{ app.applied_at|date:"d.m.Y" }}</small>
+        </div>
+        <span class="neon-text small">{{ app.mission.reward }} ₵</span>
+      </div>
+    </div>
+    {% empty %}
+    <p class="text-muted">Хакер пока не подавал заявок на миссии.</p>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

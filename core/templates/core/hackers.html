@@ -5,6 +5,34 @@
 {% block content %}
 <h4 class="neon-text mb-4">// РЕЕСТР НЕТРАННЕРОВ</h4>
 
+
+<div class="mb-3">
+  <div class="btn-group btn-group-sm">
+    <a href="?{% if request.GET.sort %}sort={{ request.GET.sort }}{% endif %}"
+       class="btn {% if not request.GET.rank %}btn-success{% else %}btn-outline-success{% endif %}">Все</a>
+    <a href="?rank=ghost{% if request.GET.sort %}&sort={{ request.GET.sort }}{% endif %}"
+       class="btn {% if request.GET.rank == 'ghost' %}btn-success{% else %}btn-outline-success{% endif %}">Ghost</a>
+    <a href="?rank=elite{% if request.GET.sort %}&sort={{ request.GET.sort }}{% endif %}"
+       class="btn {% if request.GET.rank == 'elite' %}btn-success{% else %}btn-outline-success{% endif %}">Elite</a>
+    <a href="?rank=netrunner{% if request.GET.sort %}&sort={{ request.GET.sort }}{% endif %}"
+       class="btn {% if request.GET.rank == 'netrunner' %}btn-success{% else %}btn-outline-success{% endif %}">Netrunner</a>
+    <a href="?rank=script_kiddie{% if request.GET.sort %}&sort={{ request.GET.sort }}{% endif %}"
+       class="btn {% if request.GET.rank == 'script_kiddie' %}btn-success{% else %}btn-outline-success{% endif %}">Script Kiddie</a>
+  </div>
+</div>
+
+
+<div class="mb-3">
+  <div class="btn-group btn-group-sm">
+    <a href="?sort=-rep{% if request.GET.rank %}&rank={{ request.GET.rank }}{% endif %}"
+       class="btn {% if request.GET.sort == '-rep' or not request.GET.sort %}btn-warning{% else %}btn-outline-warning{% endif %}">По репутации ▼</a>
+    <a href="?sort=handle{% if request.GET.rank %}&rank={{ request.GET.rank }}{% endif %}"
+       class="btn {% if request.GET.sort == 'handle' %}btn-warning{% else %}btn-outline-warning{% endif %}">По псевдониму</a>
+    <a href="?sort=rank{% if request.GET.rank %}&rank={{ request.GET.rank }}{% endif %}"
+       class="btn {% if request.GET.sort == 'rank' %}btn-warning{% else %}btn-outline-warning{% endif %}">По рангу</a>
+  </div>
+</div>
+
 <div class="row row-cols-1 row-cols-md-3 g-4">
   {% for hacker in hackers %}
   <div class="col">
@@ -21,8 +49,7 @@
         {% endif %}
         <div>
           <div class="neon-blue fw-bold">
-            {# Задание 2: сделать псевдоним ссылкой на профиль #}
-            {{ hacker.handle }}
+           <a href="{% url 'hacker_detail' hacker.id %}">{{ hacker.handle }}</a>
           </div>
           <small class="text-muted">{{ hacker.get_rank_display }}</small>
         </div>
