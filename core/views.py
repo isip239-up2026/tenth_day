@@ -71,3 +71,11 @@ def apply_mission(request, mission_id):
         "form": form,
         "app_count": mission.applications.count(),
     })
+
+def hacker_detail(request, hacker_id):
+    hacker = get_object_or_404(Hacker, id=hacker_id)
+    applications = hacker.applications.select_related("mission").all()
+    return render(request, "core/hacker_detail.html", {
+        "hacker": hacker,
+        "applications": applications,
+    })

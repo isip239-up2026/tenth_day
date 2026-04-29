@@ -21,8 +21,7 @@
         {% endif %}
         <div>
           <div class="neon-blue fw-bold">
-            {# Задание 2: сделать псевдоним ссылкой на профиль #}
-            {{ hacker.handle }}
+           <a href="{% url 'hacker_detail' hacker.id %}">{{ hacker.handle }}</a>
           </div>
           <small class="text-muted">{{ hacker.get_rank_display }}</small>
         </div>
