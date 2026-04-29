@@ -1,0 +1,36 @@
+{% extends "core/base.html" %}
+
+{% block title %}Импланты — NETRUNNER BOARD{% endblock %}
+
+{% block content %}
+<h2 class="neon-blue mb-4">// КАТАЛОГ ИМПЛАНТОВ</h2>
+
+<div class="mb-3">
+  <div class="btn-group btn-group-sm">
+    <a href="?" class="btn {% if not request.GET.slot %}btn-success{% else %}btn-outline-success{% endif %}">Все</a>
+    <a href="?slot=neural" class="btn {% if request.GET.slot == 'neural' %}btn-success{% else %}btn-outline-success{% endif %}">Нейронный</a>
+    <a href="?slot=optical" class="btn {% if request.GET.slot == 'optical' %}btn-success{% else %}btn-outline-success{% endif %}">Оптический</a>
+    <a href="?slot=physical" class="btn {% if request.GET.slot == 'physical' %}btn-success{% else %}btn-outline-success{% endif %}">Физический</a>
+    <a href="?slot=software" class="btn {% if request.GET.slot == 'software' %}btn-success{% else %}btn-outline-success{% endif %}">Программный</a>
+  </div>
+</div>
+
+<div class="row g-4">
+  {% for implant in implants %}
+  <div class="col-md-4">
+    <a href="{% url 'implant_detail' implant.id %}" class="text-decoration-none">
+      <div class="card p-3 h-100">
+        <h5 class="neon-pink">{{ implant.name }}</h5>
+        <p class="text-muted small mb-1">Слот: {{ implant.get_slot_display }}</p>
+        <p class="neon-text mb-1">{{ implant.price }} ₵</p>
+        <small class="text-muted">
+          {% if implant.manufacturer %}{{ implant.manufacturer.name }}{% else %}Неизвестно{% endif %}
+        </small>
+      </div>
+    </a>
+  </div>
+  {% empty %}
+  <p class="text-muted">Импланты не найдены.</p>
+  {% endfor %}
+</div>
+{% endblock %}

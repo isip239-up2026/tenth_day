@@ -1,0 +1,40 @@
+{% extends "core/base.html" %}
+
+{% block title %}{{ implant.name }} — NETRUNNER BOARD{% endblock %}
+
+{% block content %}
+<nav aria-label="breadcrumb" class="mb-3">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{% url 'implants' %}">Импланты</a></li>
+    <li class="breadcrumb-item active" style="color:#aaa;">{{ implant.name }}</li>
+  </ol>
+</nav>
+
+<div class="row">
+  <div class="col-md-8">
+    <h2 class="neon-blue mb-3">{{ implant.name }}</h2>
+    <div class="terminal-box mb-4">
+      {{ implant.description|linebreaks }}
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="card p-3 mb-3">
+      <h6 class="neon-pink mb-3">// ХАРАКТЕРИСТИКИ</h6>
+      <table class="table table-sm" style="color:#aaa;border-color:#2a2a4a;">
+        <tr><td>Слот</td><td>{{ implant.get_slot_display }}</td></tr>
+        <tr><td>Цена</td><td class="neon-text">{{ implant.price }} ₵</td></tr>
+        <tr>
+          <td>Производитель</td>
+          <td>
+            {% if implant.manufacturer %}
+            <a href="{% url 'corporation_detail' implant.manufacturer.id %}">{{ implant.manufacturer.name }}</a>
+            {% else %}
+            <span class="text-muted">Неизвестно</span>
+            {% endif %}
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock %}
