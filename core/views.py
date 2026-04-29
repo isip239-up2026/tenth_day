@@ -16,3 +16,19 @@ def mission_detail(request, mission_id):
 def hackers(request):
     hacker_list = Hacker.objects.select_related("corporation").all()
     return render(request, "core/hackers.html", {"hackers": hacker_list})
+
+
+def corporations(request):
+    corp_list = Corporation.objects.all().order_by("name")
+    return render(request, "core/corporations.html", {"corporations": corp_list})
+
+
+def corporation_detail(request, corp_id):
+    corp = get_object_or_404(Corporation, id=corp_id)
+    missions = corp.missions.all()
+    hackers = corp.hackers.all()
+    return render(request, "core/corporation_detail.html", {
+        "corporation": corp,
+        "missions": missions,
+        "hackers": hackers,
+    })

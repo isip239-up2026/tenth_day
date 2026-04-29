@@ -1,0 +1,75 @@
+{% extends "core/base.html" %}
+
+{% block title %}{{ corporation.name }} — NETRUNNER BOARD{% endblock %}
+
+{% block content %}
+<nav aria-label="breadcrumb" class="mb-3">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{% url 'corporations' %}">Корпорации</a></li>
+    <li class="breadcrumb-item active" style="color:#aaa;">{{ corporation.name }}</li>
+  </ol>
+</nav>
+
+<h2 class="neon-blue mb-2">{{ corporation.name }}</h2>
+{% if corporation.slogan %}
+<p class="neon-pink fs-5 mb-3">{{ corporation.slogan }}</p>
+{% endif %}
+
+<div class="row mb-4">
+  <div class="col-md-8">
+    <div class="terminal-box">
+      {{ corporation.description|linebreaks|default:"Описание отсутствует." }}
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="card p-3">
+      {% if corporation.logo_url %}
+      <img src="{{ corporation.logo_url }}" class="card-img-top mb-2" alt="{{ corporation.name }}">
+      {% endif %}
+      <p class="mb-1"><strong>Основана:</strong> {{ corporation.founded|default:"Неизвестно" }}</p>
+    </div>
+  </div>
+</div>
+
+<hr>
+
+<div class="row">
+  <div class="col-md-6 mb-4">
+    <h5 class="neon-text mb-3">// МИССИИ</h5>
+    {% for mission in missions %}
+    <div class="card p-3 mb-2">
+      <a href="{% url 'mission_detail' mission.id %}">{{ mission.title }}</a>
+      <div class="d-flex gap-3 flex-wrap mt-1">
+        <small class="neon-text">{{ mission.reward }} ₵</small>
+        <small class="neon-pink">Сложность: {{ mission.difficulty }}/5</small>
+        <small class="text-muted">{{ mission.get_status_display }}</small>
+      </div>
+    </div>
+    {% empty %}
+    <p class="text-muted">У этой корпорации пока нет активных миссий.</p>
+    {% endfor %}
+  </div>
+
+  <div class="col-md-6 mb-4">
+    <h5 class="neon-pink mb-3">// ХАКЕРЫ В ШТАТЕ</h5>
+    {% for hacker in hackers %}
+    <div class="card p-3 mb-2">
+      <div class="d-flex justify-content-between align-items-center">
+        <div>
+          {% if hacker.avatar_url %}
+          <img src="{{ hacker.avatar_url }}" style="width:32px;height:32px;border-radius:50%;object-fit:cover;" class="me-2">
+          {% endif %}
+          <span class="text-nowrap">{{ hacker.handle }}</span>
+        </div>
+        <span class="neon-text small">REP: {{ hacker.rep }}</span>
+      </div>
+      {% if hacker.bio %}
+      <small class="text-muted d-block mt-1">{{ hacker.bio|truncatechars:80 }}</small>
+      {% endif %}
+    </div>
+    {% empty %}
+    <p class="text-muted">В штате этой корпорации нет хакеров.</p>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}
