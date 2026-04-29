@@ -26,7 +26,15 @@ def mission_detail(request, mission_id):
 
 
 def hackers(request):
+    rank = request.GET.get("rank")
+    sort = request.GET.get("sort", "-rep")
     hacker_list = Hacker.objects.select_related("corporation").all()
+
+    if rank:
+        hacker_list = hacker_list.filter(rank=rank)
+
+    hacker_list = hacker_list.order_by(sort)
+
     return render(request, "core/hackers.html", {"hackers": hacker_list})
 
 
