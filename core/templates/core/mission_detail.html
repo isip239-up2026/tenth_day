@@ -31,9 +31,20 @@
 
     <hr>
 
-    {# Задание 5: форма подачи заявки на миссию #}
     <h5 class="neon-text mb-3">// ПОДАТЬ ЗАЯВКУ</h5>
-    <p class="text-muted">Форма подачи заявки появится здесь.</p>
+    <form method="post" action="{% url 'apply_mission' mission.id %}">
+      {% csrf_token %}
+      {% for field in form %}
+      <div class="mb-3">
+        <label class="form-label text-muted small">{{ field.label }}</label>
+        {{ field }}
+        {% if field.errors %}
+        <div class="text-danger small mt-1">{{ field.errors.0 }}</div>
+        {% endif %}
+      </div>
+      {% endfor %}
+      <button type="submit" class="btn-cyber">ОТПРАВИТЬ ЗАЯВКУ</button>
+    </form>
 
   </div>
 
@@ -46,8 +57,7 @@
         <tr><td>Статус</td><td>{{ mission.get_status_display }}</td></tr>
         <tr>
           <td>Заявок</td>
-          {# Задание 5: вывести количество заявок #}
-          <td>—</td>
+          <td>{{ app_count }}</td>
         </tr>
       </table>
     </div>
