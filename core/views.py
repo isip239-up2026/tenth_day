@@ -2,6 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.core.paginator import Paginator
 from .models import Mission, Hacker, Corporation, Implant, NewsPost, MissionApplication
 from .forms import ApplicationForm
+from django.db.models import Count, Avg, Sum
 
 
 def index(request):
@@ -20,6 +21,7 @@ def index(request):
     page_obj = paginator.get_page(page_number)
 
     news = NewsPost.objects.all()[:5]
+    top5 = Hacker.objects.order_by('-rep')[:5]
 
 
     filter_params = ""
@@ -31,6 +33,7 @@ def index(request):
     return render(request, "core/index.html", {
         "missions": page_obj,
         "news": news,
+        "top5": top5,
         "filter_params": filter_params,
     })
 
@@ -127,6 +130,19 @@ def implants(request):
 def implant_detail(request, implant_id):
     implant = get_object_or_404(Implant, id=implant_id)
     return render(request, "core/implant_detail.html", {"implant": implant})
+
+def top_hackers(request):
+    top = Hacker.objects.order_by('-rep')[:10]
+    stats = {
+        'total_missions': Mission.objects.count(),
+        'total_hackers': Hacker.objects.count(),
+        'total_reward': Mission.objects.aggregate(s=Sum('reward'))['s'],
+        'avg_difficulty': Mission.objects.aggregate(a=Avg('difficulty'))['a'],
+    }
+    return render(request, 'core/top.html', {
+        'top': top,
+        'stats': stats,
+    })
 
 
 def news_detail(request, post_id):

@@ -119,7 +119,23 @@
 
     <h4 class="neon-text mb-3 mt-2">// ТОП ХАКЕРОВ</h4>
     {# Задание 11: вывести топ-5 хакеров по репутации #}
+    <h4 class="neon-text mb-3 mt-2">// ТОП ХАКЕРОВ</h4>
+    {% for hacker in top5 %}
+    <div class="card p-2 mb-2">
+      <div class="d-flex justify-content-between align-items-center">
+        <div>
+          <a href="{% url 'hacker_detail' hacker.id %}" class="text-decoration-none" style="color: var(--neon-blue);">
+            <small><strong>{{ hacker.handle }}</strong></small>
+          </a>
+          <br>
+          <small class="text-muted">{{ hacker.get_rank_display }}</small>
+        </div>
+        <div class="neon-text"><small>{{ hacker.rep }} REP</small></div>
+      </div>
+    </div>
+    {% empty %}
     <p class="text-muted"><small>Загрузка данных...</small></p>
+    {% endfor %}
   </div>
 </div>
 {% endblock %}

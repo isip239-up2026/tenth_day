@@ -1,0 +1,67 @@
+{% extends "core/base.html" %}
+
+{% block title %}Топ хакеров — NETRUNNER BOARD{% endblock %}
+
+{% block content %}
+<h4 class="neon-text mb-3">// ТОП-10 ХАКЕРОВ ПО РЕПУТАЦИИ</h4>
+
+<div class="row">
+  <div class="col-md-8">
+    <div class="card p-3">
+      {% for hacker in top %}
+      <div class="d-flex align-items-center mb-3 p-2
+        {% if forloop.counter == 1 %}bg-warning bg-opacity-10 rounded border border-warning
+        {% elif forloop.counter == 2 %}bg-secondary bg-opacity-10 rounded border border-secondary
+        {% elif forloop.counter == 3 %}bg-danger bg-opacity-10 rounded border border-danger
+        {% endif %}
+      ">
+        <div class="me-3">
+          {% if forloop.counter == 1 %}🥇
+          {% elif forloop.counter == 2 %}🥈
+          {% elif forloop.counter == 3 %}🥉
+          {% else %}<span class="text-muted">#{{ forloop.counter }}</span>
+          {% endif %}
+        </div>
+        <div class="me-3">
+          <div style="width:50px;height:50px;background:var(--bg-card2);border:1px solid var(--border-dim);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--neon-blue);">
+            {{ hacker.handle|slice:":1" }}
+          </div>
+        </div>
+        <div>
+          <a href="{% url 'hacker_detail' hacker.id %}" class="text-decoration-none" style="color: var(--neon-blue);">
+            <strong>{{ hacker.handle }}</strong>
+          </a>
+          <br>
+          <small class="text-muted">{{ hacker.get_rank_display }}</small>
+        </div>
+        <div class="ms-auto text-end">
+          <div class="neon-text fw-bold">{{ hacker.rep }} REP</div>
+        </div>
+      </div>
+      {% empty %}
+      <p class="text-muted">Нет данных.</p>
+      {% endfor %}
+    </div>
+  </div>
+
+  <div class="col-md-4">
+    <div class="card p-3">
+      <h5 class="neon-pink mb-3">// СТАТИСТИКА СЕТИ</h5>
+      <ul class="list-unstyled">
+        <li class="mb-2">
+          <span class="neon-text">&gt;</span> Всего миссий: <strong>{{ stats.total_missions }}</strong>
+        </li>
+        <li class="mb-2">
+          <span class="neon-text">&gt;</span> Хакеров в сети: <strong>{{ stats.total_hackers }}</strong>
+        </li>
+        <li class="mb-2">
+          <span class="neon-text">&gt;</span> Суммарная награда: <strong>{{ stats.total_reward }} ₵</strong>
+        </li>
+        <li>
+          <span class="neon-text">&gt;</span> Средняя сложность: <strong>{{ stats.avg_difficulty|floatformat:1 }}</strong>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+{% endblock %}

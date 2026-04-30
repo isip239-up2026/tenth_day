@@ -11,6 +11,7 @@ urlpatterns = [
     path("hacker/<int:hacker_id>/", views.hacker_detail, name="hacker_detail"),
     path("implants/", views.implants, name="implants"),
     path("implant/<int:implant_id>/", views.implant_detail, name="implant_detail"),
+    path("top/", views.top_hackers, name="top"),
     path("news/<int:post_id>/", views.news_detail, name="news_detail"),
     path("news", views.news_list, name="news_list"),
 ]
