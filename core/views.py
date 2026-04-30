@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.core.paginator import Paginator
 from .models import Mission, Hacker, Corporation, Implant, NewsPost, MissionApplication
-from .forms import ApplicationForm
+from .forms import ApplicationForm, ContactForm
 
 
 def index(request):
@@ -127,3 +127,17 @@ def implants(request):
 def implant_detail(request, implant_id):
     implant = get_object_or_404(Implant, id=implant_id)
     return render(request, "core/implant_detail.html", {"implant": implant})
+
+def news_detail(request, post_id):
+    news = get_object_or_404(NewsPost, id=post_id)
+    news.views += 1
+    news.save()
+    return render(request, "core/news_detail.html", {"news": NewsPost.objects.filter(id=post_id)})
+
+
+def news_list(request):
+    return render(request, "core/news_list.html", {"news": NewsPost.objects.all()})
+
+def contact_hacker(request):
+
+    return render(request, "core/contact.html", {"contact": ContactForm.objects.all()})

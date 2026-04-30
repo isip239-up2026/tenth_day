@@ -18,3 +18,28 @@ class ApplicationForm(forms.Form):
             "placeholder": "Почему именно вы должны получить этот контракт?"
         })
     )
+class ContactForm(forms.Form):
+    from_handle = forms.CharField(
+        label="Ваш псевдоним",
+        max_length=100,
+        widget=forms.TextInput(attrs={
+            "class": "form-control bg-dark text-light border-secondary",
+            "placeholder": "Введите свой псевдоним"
+        })
+    )
+    subject = forms.CharField(
+        label="Тема",
+        max_length=150,
+        widget=forms.TextInput(attrs={
+            "class": "form-control bg-dark text-light border-secondary",
+            "placeholder": "Введите тему"
+        })
+    )
+    message = forms.CharField(
+        label="Тема",
+        max_length=500,
+        widget=forms.Textarea(attrs={
+            "class": "form-control bg-dark text-light border-secondary",
+            "placeholder": "гугугага"
+        })
+    )
