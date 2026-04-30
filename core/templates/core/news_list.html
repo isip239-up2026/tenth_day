@@ -1,0 +1,25 @@
+{% extends "core/base.html" %}
+
+{% block title %}{{ corporation.name }} — NETRUNNER BOARD{% endblock %}
+
+{% block content %}
+
+
+{% for i in news %}
+<div class="card mb-3" style="max-width: 600px;">
+  <div class="card-body">
+    <h5 class="card-title" style="color: #007BFF;">
+      <a href="{% url 'news_detail' i.id %}" class="text-decoration-none">{{ i.title }}</a>
+    </h5>
+    <p class="card-text" style="font-size: 0.9rem; color: #6c757d;">
+      <small>Опубликовано: {{ i.posted_at }}</small>
+    </p>
+    <p class="card-text" style="font-size: 0.9rem; color: #6c757d;">
+      Просмотров: {{ i.views }}
+    </p>
+    <a href="{% url 'news_detail' i.id %}" class="btn btn-primary">Подробнее</a>
+  </div>
+</div>
+{% endfor %}
+
+{% endblock %}

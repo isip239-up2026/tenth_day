@@ -127,3 +127,15 @@ def implants(request):
 def implant_detail(request, implant_id):
     implant = get_object_or_404(Implant, id=implant_id)
     return render(request, "core/implant_detail.html", {"implant": implant})
+
+
+def news_detail(request, post_id):
+    news = get_object_or_404(NewsPost, id=post_id)
+    news.views += 1
+    news.save()
+    return render(request, "core/news_detail.html", {"news": NewsPost.objects.filter(id=post_id)})
+
+
+def news_list(request):
+    return render(request, "core/news_list.html", {"news": NewsPost.objects.all()})
+
