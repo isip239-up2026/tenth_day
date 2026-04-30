@@ -143,3 +143,15 @@ def top_hackers(request):
         'top': top,
         'stats': stats,
     })
+
+
+def news_detail(request, post_id):
+    news = get_object_or_404(NewsPost, id=post_id)
+    news.views += 1
+    news.save()
+    return render(request, "core/news_detail.html", {"news": NewsPost.objects.filter(id=post_id)})
+
+
+def news_list(request):
+    return render(request, "core/news_list.html", {"news": NewsPost.objects.all()})
+
